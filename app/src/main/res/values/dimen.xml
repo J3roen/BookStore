@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- dimensions used in empty display view-->
+    <dimen name="empty_title_text_padding_top">16dp</dimen>
+    <dimen name="empty_view_subtitle_text">8dp</dimen>
+
+    <!-- dimensions used in activity_editor -->
+    <dimen name="editor_padding">16dp</dimen>
+    <dimen name="input_field_padding_left">4dp</dimen>
+
+    <!-- dimensions used in list_item -->
+    <dimen name="list_item_padding">16dp</dimen>
+
+    <!-- margin around the floating action button in MainActivity-->
+    <dimen name="fab_margin">16dp</dimen>
+
+</resources>

@@ -1,3 +1,68 @@
 <resources>
-    <string name="app_name">Book Store</string>
+    <string name="app_name">Store Inventory</string>
+
+    <!-- String used in empty view display-->
+    <string name="empty_view_title_text">No products found</string>
+    <string name="empty_view_subtitle_text">Add some products from the menu to get started!</string>
+
+    <!-- Error messages from for data validation -->
+    <string name="error_product_no_name">Product needs a name</string>
+    <string name="error_product_name_empty">Product name can\'t be empty</string>
+    <string name="error_price_negative">Price can\'t be negative</string>
+    <string name="error_quantity_negative">Quantity can\'t be negative </string>
+    <string name="error_no_supplier_name">Supplier name can\'t be empty</string>
+    <string name="error_no_supplier_phone">Supplier phone can\'t be empty</string>
+
+    <!-- Error messages from editing pet data -->
+    <string name="error_saving_product">Error with saving product</string>
+    <string name="product_saved_successful">Product saved</string>
+    <string name="error_updating_product">Error with updating product</string>
+    <string name="product_update_successful">Product updated, %d attributes changed</string>
+    <string name="product_delete_successful">Product deleted</string>
+    <string name="product_delete_failed">Product delete failed</string>
+
+    <!-- Error messages with CRUD operations -->
+    <string name="error_failed_insert_row">Failed to insert row for %s</string>
+    <string name="error_insertion_not_supported">Insertion is not supported for  %s</string>
+    <string name="error_deletion_not_supported">Deletion is not supported for %s</string>
+    <string name="error_uri_unknown">Cannot query unknown URI %s</string>
+    <string name="error_uri_unknown_match">Unknown URI %s with match %d</string>
+    <string name="error_update_not_supported">Update is not supported for %s</string>
+
+    <!-- Strings used in activity_editor-->
+    <string name="category_overview">Product Information</string>
+    <string name="hint_product_name">Name</string>
+    <string name="hint_product_price">Price</string>
+    <string name="hint_product_quantity">Quantity</string>
+    <string name="hint_supplier_name">Supplier Name</string>
+    <string name="hint_supplier_phone">Supplier phone</string>
+
+    <!-- Strings used for logging -->
+    <string name="logger_rowsdeleted">%d rows deleted from pet database</string>
+
+    <!-- Strings used for menus -->
+    <string name="action_delete_all_entries">Delete all products</string>
+    <string name="action_add_new_product">Add new product</string>
+    <string name="action_edit_product">Edit a product</string>
+    <string name="action_save">Save</string>
+    <string name="action_delete">Delete</string>
+
+    <!-- Strings used for dialogs -->
+    <string name="dialog_delete_message">Delete this product</string>
+    <string name="dialog_delete_positive">Delete</string>
+    <string name="dialog_delete_negative">Cancel</string>
+    <string name="dialog_discard_message">Discard your changes and quit editing?</string>
+    <string name="dialog_discard_positive">Discard</string>
+    <string name="dialog_discard_negative">Keep editing</string>
+
+    <!-- Strings used in manifest -->
+    <string name="editor_activity_title">Add a product</string>
+
+    <!-- Strings used for units -->
+    <string name="product_unit_price">EUR</string>
+
+    <!-- String used when displaying list of products -->
+    <string name="list_price_label">Price: € %d</string>
+    <string name="list_quantity_label">Quantity: %d</string>
+
 </resources>
