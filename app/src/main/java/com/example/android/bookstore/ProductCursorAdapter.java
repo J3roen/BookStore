@@ -23,14 +23,16 @@ import com.example.android.bookstore.data.StoreContract;
  */
 public class ProductCursorAdapter extends CursorAdapter {
 
-    /**inner ViewHolder class to reduce use of findViewById
-     *
+    /**
+     * inner ViewHolder class to reduce use of findViewById
      */
     private static class ViewHolder {
         TextView mNameView;
         TextView mPriceView;
         TextView mQuantityView;
         Button mSellButton;
+        LinearLayout mItemContainer;
+
     }
 
     /**
@@ -54,13 +56,16 @@ public class ProductCursorAdapter extends CursorAdapter {
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
+
         //load views into ViewHolder
         ViewHolder viewHolder = new ViewHolder();
         viewHolder.mNameView = view.findViewById(R.id.product_name);
         viewHolder.mPriceView = view.findViewById(R.id.product_price);
         viewHolder.mQuantityView = view.findViewById(R.id.product_quantity);
         viewHolder.mSellButton = view.findViewById(R.id.item_list_sell_button);
-        view.setTag(viewHolder);
+        viewHolder.mItemContainer = view.findViewById(R.id.list_item_layout);
+        view.setTag(R.string.tag_item_viewHolder, viewHolder);
+
         return view;
     }
 
@@ -73,8 +78,8 @@ public class ProductCursorAdapter extends CursorAdapter {
      */
     @Override
     public void bindView(View view, Context context, final Cursor cursor) {
-        //load views into ViewHolder, reduces findViewById use
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        //get viewHolder from view tag
+        ViewHolder viewHolder = (ViewHolder) view.getTag(R.string.tag_item_viewHolder);
 
         //find columns of store attributes that we want
         int nameColumnIndex = cursor.getColumnIndex(StoreContract.ProductEntry.COLUMN_PRODUCT_NAME);
@@ -96,8 +101,7 @@ public class ProductCursorAdapter extends CursorAdapter {
         final int id = cursor.getInt(idIndex);
 
         //setup listener for detail view
-        LinearLayout itemContainer = view.findViewById(R.id.list_item_layout);
-        itemContainer.setOnClickListener(new View.OnClickListener() {
+        viewHolder.mItemContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -115,37 +119,45 @@ public class ProductCursorAdapter extends CursorAdapter {
             }
         });
 
+        //load data from cursor outside of listener, else you always read data from last item in cursor
+        //get quantity column index & quantity value
+        int quantityIndex = getCursor().getColumnIndex(StoreContract.ProductEntry.COLUMN_PRODUCT_QUANTITY);
+        int quantity = getCursor().getInt(quantityIndex);
+        //pass quantity as tag with button
+        viewHolder.mSellButton.setTag(R.string.tag_sellButton_quantity, quantity);
+        //pass id as tag with button
+        viewHolder. mSellButton.setTag(R.string.tag_sellButton_id, id);
         //setup sell button listener
         viewHolder.mSellButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context context = v.getContext();
-                //get quantity column index & quantity value
-                int quantityIndex = getCursor().getColumnIndex(StoreContract.ProductEntry.COLUMN_PRODUCT_QUANTITY);
-                int quantity = getCursor().getInt(quantityIndex);
-
-                //check to see if quantity = 0, if so -> show toast & return
-                if (quantity == 0) {
-                    Toast.makeText(context, context.getString(R.string.error_product_negative_sell), Toast.LENGTH_SHORT).show();
-                    return;
-                } else {
-                    // reduce quantity with 1
-                    quantity--;
-                    //get product ID so we know what to update
-                    int idIndex = getCursor().getColumnIndex(StoreContract.ProductEntry._ID);
-                    int id = getCursor().getInt(idIndex);
-                    //create ContentValues object
-                    ContentValues values = new ContentValues();
-                    values.put(StoreContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
-
-                    //get product URI
-
-                    Uri productUri = Uri.withAppendedPath(StoreContract.ProductEntry.CONTENT_URI, String.valueOf(id));
-                    //update product
-                    context.getContentResolver().update(productUri, values, null, null);
-                    Toast.makeText(context, context.getString(R.string.product_sold_successful), Toast.LENGTH_SHORT).show();
-                }
+                performSellAction(v);
             }
         });
+    }
+
+    private void performSellAction(View v) {
+        Context context = v.getContext();
+        //get quantity value from view tag
+        int quantity = (Integer) v.getTag(R.string.tag_sellButton_quantity);
+        //check to see if quantity = 0, if so -> show toast & return
+        if (quantity == 0) {
+            Toast.makeText(context, context.getString(R.string.error_product_negative_sell), Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            // reduce quantity with 1
+            quantity--;
+
+            //create ContentValues object
+            ContentValues values = new ContentValues();
+            values.put(StoreContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
+
+            //get product URI
+            Uri productUri = Uri.withAppendedPath(StoreContract.ProductEntry.CONTENT_URI, String.valueOf(v.getTag(R.string.tag_sellButton_id)));
+
+            //update product
+            context.getContentResolver().update(productUri, values, null, null);
+            Toast.makeText(context, context.getString(R.string.product_sold_successful), Toast.LENGTH_SHORT).show();
+        }
     }
 }

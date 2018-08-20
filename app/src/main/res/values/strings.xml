@@ -43,6 +43,9 @@
     <string name="hint_product_quantity">Quantity</string>
     <string name="hint_supplier_name">Supplier Name</string>
     <string name="hint_supplier_phone">Supplier phone</string>
+    <string name="tag_sellButton_quantity" translatable="false">QuantityTag</string>
+    <string name="tag_sellButton_id" translatable="false">IdentifierTag</string>
+    <string name="tag_item_viewHolder" translatable="false">ViewHolderTag</string>
 
     <!-- Strings used for logging -->
     <string name="logger_rowsdeleted">%d rows deleted from pet database</string>
