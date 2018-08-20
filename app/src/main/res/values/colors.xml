@@ -31,4 +31,6 @@
     <color name="list_item_name">#2B3D4D</color>
     <!-- summary text color in list item -->
     <color name="list_item_summary">#AEB6BD</color>
+    <!-- text color for emptyView subtitle-->
+    <color name="empty_subtitle_text">#A2AAB0</color>
 </resources>

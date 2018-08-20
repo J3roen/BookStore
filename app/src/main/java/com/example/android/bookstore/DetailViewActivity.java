@@ -175,20 +175,11 @@ public class DetailViewActivity extends AppCompatActivity implements LoaderManag
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        //since detail view shows all product attributes, defina projection that contains everything
-        String[] projection = {
-                StoreContract.ProductEntry._ID,
-                StoreContract.ProductEntry.COLUMN_PRODUCT_NAME,
-                StoreContract.ProductEntry.COLUMN_PRODUCT_PRICE,
-                StoreContract.ProductEntry.COLUMN_PRODUCT_QUANTITY,
-                StoreContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME,
-                StoreContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE
-        };
-
+        //since detail view shows all product attributes, projection = null -> return all columns
         //loader will execute ContentProvider's quary method on background thread
         return new CursorLoader(this,
                 mProductUri,
-                projection,
+                null,
                 null,
                 null,
                 null);

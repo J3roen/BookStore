@@ -23,6 +23,16 @@ import com.example.android.bookstore.data.StoreContract;
  */
 public class ProductCursorAdapter extends CursorAdapter {
 
+    /**inner ViewHolder class to reduce use of findViewById
+     *
+     */
+    private static class ViewHolder {
+        TextView mNameView;
+        TextView mPriceView;
+        TextView mQuantityView;
+        Button mSellButton;
+    }
+
     /**
      * Constructs new ProductCursorAdapter
      *
@@ -43,7 +53,15 @@ public class ProductCursorAdapter extends CursorAdapter {
      */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
+        //load views into ViewHolder
+        ViewHolder viewHolder = new ViewHolder();
+        viewHolder.mNameView = view.findViewById(R.id.product_name);
+        viewHolder.mPriceView = view.findViewById(R.id.product_price);
+        viewHolder.mQuantityView = view.findViewById(R.id.product_quantity);
+        viewHolder.mSellButton = view.findViewById(R.id.item_list_sell_button);
+        view.setTag(viewHolder);
+        return view;
     }
 
     /**
@@ -55,11 +73,8 @@ public class ProductCursorAdapter extends CursorAdapter {
      */
     @Override
     public void bindView(View view, Context context, final Cursor cursor) {
-        //find individual views that we want to modify
-        TextView nameTextView = (TextView) view.findViewById(R.id.product_name);
-        TextView priceView = (TextView) view.findViewById(R.id.product_price);
-        TextView quantityView = (TextView) view.findViewById(R.id.product_quantity);
-        Button sellButton = view.findViewById(R.id.item_list_sell_button);
+        //load views into ViewHolder, reduces findViewById use
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         //find columns of store attributes that we want
         int nameColumnIndex = cursor.getColumnIndex(StoreContract.ProductEntry.COLUMN_PRODUCT_NAME);
@@ -72,18 +87,19 @@ public class ProductCursorAdapter extends CursorAdapter {
         int productQuantity = cursor.getInt(quantityColumnIndex);
 
         //update the textviews with the attributes for current store
-        nameTextView.setText(productName);
-        priceView.setText(context.getString(R.string.list_price_label, productPrice));
-        quantityView.setText(context.getString(R.string.list_quantity_label, productQuantity));
+        viewHolder.mNameView.setText(productName);
+        viewHolder.mPriceView.setText(context.getString(R.string.list_price_label, productPrice));
+        viewHolder.mQuantityView.setText(context.getString(R.string.list_quantity_label, productQuantity));
+
+        //get ID for product
+        int idIndex = cursor.getColumnIndex(StoreContract.ProductEntry._ID);
+        final int id = cursor.getInt(idIndex);
 
         //setup listener for detail view
         LinearLayout itemContainer = view.findViewById(R.id.list_item_layout);
         itemContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //get ID for product
-                int idIndex = cursor.getColumnIndex(StoreContract.ProductEntry._ID);
-                int id = cursor.getInt(idIndex);
 
                 Intent intent = new Intent(v.getContext(), DetailViewActivity.class);
 
@@ -100,7 +116,7 @@ public class ProductCursorAdapter extends CursorAdapter {
         });
 
         //setup sell button listener
-        sellButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.mSellButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
