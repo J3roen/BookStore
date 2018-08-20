@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
 
         //Find the ListView which will be populated with product data
-        ListView productListView = (ListView) findViewById(R.id.list);
+        ListView productListView = findViewById(R.id.list);
 
         //Find and set empty view on the ListView, so it only shows when list has no items
         View emptyView = findViewById(R.id.empty_view);

@@ -48,18 +48,6 @@ public class DetailViewActivity extends AppCompatActivity implements LoaderManag
     private TextView mSupplierNameView;
     private TextView mSupplierPhoneView;
 
-    /**
-     * private variables for the action buttons
-     */
-    private Button sellButton;
-    private Button orderButton;
-    private Button buyButton;
-
-    /**
-     * private quantity variable, since we will be working with this value
-     */
-    private int quantity;
-
     @Override
     protected void onCreate(Bundle savedInstanceBundle) {
         super.onCreate(savedInstanceBundle);
@@ -176,7 +164,9 @@ public class DetailViewActivity extends AppCompatActivity implements LoaderManag
         //call ContentResolver to delete product with current Uri
         getContentResolver().delete(mProductUri, null, null);
 
-        //close activity
+        //return to mainActivity
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 
@@ -236,9 +226,12 @@ public class DetailViewActivity extends AppCompatActivity implements LoaderManag
             final int quantityInt = Integer.parseInt(quantity);
 
             //set onClickListeners on the buttons
-            sellButton = findViewById(R.id.detail_action_sell);
-            orderButton = findViewById(R.id.detail_action_call_supplier);
-            buyButton = findViewById(R.id.detail_action_buy);
+            /*
+      private variables for the action buttons
+     */
+            Button sellButton = findViewById(R.id.detail_action_sell);
+            Button orderButton = findViewById(R.id.detail_action_call_supplier);
+            Button buyButton = findViewById(R.id.detail_action_buy);
             //on click sell -> update quantity with sell action code & pass current quantity as param
             sellButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -261,6 +254,7 @@ public class DetailViewActivity extends AppCompatActivity implements LoaderManag
                     String uri = "tel:"+supplier_phone.trim();
                     intent.setData(Uri.parse(uri));
                     startActivity(intent);
+                    finish();
                 }
             });
         }

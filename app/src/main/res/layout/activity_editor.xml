@@ -35,7 +35,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
                 <!--Price field-->
                 <EditText
                     android:id="@+id/edit_product_price"
