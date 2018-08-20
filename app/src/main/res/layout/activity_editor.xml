@@ -30,7 +30,7 @@
             <EditText
                 android:id="@+id/edit_product_name"
                 android:hint="@string/hint_product_name"
-                android:inputType="textCapWords"
+                android:inputType="textAutoCorrect"
                 style="@style/EditorFieldStyle"/>
 
             <RelativeLayout
@@ -61,14 +61,14 @@
             <EditText
                 android:id="@+id/edit_supplier_name"
                 android:hint="@string/hint_supplier_name"
-                android:inputType="text"
+                android:inputType="textCapWords"
                 style="@style/EditorFieldStyle"/>
 
             <!-- supplier phone field -->
             <EditText
                 android:id="@+id/edit_supplier_phone"
                 android:hint="@string/hint_supplier_phone"
-                android:inputType="text"
+                android:inputType="phone"
                 style="@style/EditorFieldStyle"/>
 
         </LinearLayout>

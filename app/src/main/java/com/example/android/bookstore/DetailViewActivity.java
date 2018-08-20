@@ -2,6 +2,7 @@ package com.example.android.bookstore;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -58,7 +59,7 @@ public class DetailViewActivity extends AppCompatActivity implements LoaderManag
         mProductUri = intent.getData();
         //if no Uri to product data -> go to mainActivity
         if (mProductUri == null) {
-            Intent mainIntent = new Intent(this,MainActivity.class);
+            Intent mainIntent = new Intent(this, MainActivity.class);
             startActivity(mainIntent);
         } else {
             //load product
@@ -72,34 +73,36 @@ public class DetailViewActivity extends AppCompatActivity implements LoaderManag
         mSupplierNameView = findViewById(R.id.detail_supplier_name_value);
         mSupplierPhoneView = findViewById(R.id.detail_supplier_phone_value);
     }
+
     /**
      * private helper method to update quantity when clicking on buy or sell button
+     *
      * @param action Integer that defines if we either increase or decrease quantity
      */
     private void updateQuantity(int action, int quantity) {
         //initialize ContentValues object to pass onto ContentResolver
         ContentValues values = new ContentValues();
         //check action to see if we increase or decrease
-        switch(action) {
+        switch (action) {
             case QUANTITY_SELL:
                 //check to see if quantity > 0, can't be negative!
                 if (quantity > 0) {
                     quantity--;
                     values.put(StoreContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
-                    getContentResolver().update(mProductUri,values,null,null);
-                    Toast.makeText(this,getString(R.string.detail_quantity_decrease_successful),Toast.LENGTH_SHORT).show();
+                    getContentResolver().update(mProductUri, values, null, null);
+                    Toast.makeText(this, getString(R.string.detail_quantity_decrease_successful), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this,getString(R.string.error_quantity_negative), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.error_quantity_negative), Toast.LENGTH_SHORT).show();
                 }
                 break;
             case QUANTITY_BUY:
-                quantity ++;
+                quantity++;
                 values.put(StoreContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
-                getContentResolver().update(mProductUri,values,null,null);
-                Toast.makeText(this, getString(R.string.detail_quantity_increase_successful),Toast.LENGTH_SHORT).show();
+                getContentResolver().update(mProductUri, values, null, null);
+                Toast.makeText(this, getString(R.string.detail_quantity_increase_successful), Toast.LENGTH_SHORT).show();
                 break;
-                default: //this shouldn't happen
-                    throw new IllegalArgumentException(getString(R.string.error_quantity_code, action));
+            default: //this shouldn't happen
+                throw new IllegalArgumentException(getString(R.string.error_quantity_code, action));
         }
     }
 
@@ -236,7 +239,7 @@ public class DetailViewActivity extends AppCompatActivity implements LoaderManag
             sellButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    updateQuantity(QUANTITY_SELL,quantityInt);
+                    updateQuantity(QUANTITY_SELL, quantityInt);
                 }
             });
             //on click buy -> update quantity with buy action code & pass current quantity as param
@@ -250,11 +253,15 @@ public class DetailViewActivity extends AppCompatActivity implements LoaderManag
             orderButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_NEW_OUTGOING_CALL);
-                    String uri = "tel:"+supplier_phone.trim();
-                    intent.setData(Uri.parse(uri));
-                    startActivity(intent);
-                    finish();
+                    try { // try to launch dial action with given phone number
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        String uri = "tel:" + supplier_phone.trim();
+                        intent.setData(Uri.parse(uri));
+                        startActivity(intent);
+                        finish();
+                    } catch (ActivityNotFoundException e) { //if no intent handler found, show toast & do nothing
+                        Toast.makeText(v.getContext(), getString(R.string.detail_no_phone_activity), Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }

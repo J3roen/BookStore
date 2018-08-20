@@ -85,6 +85,7 @@
     <string name="detail_supplier_phone_tag">Supplier phone:</string>
     <string name="detail_quantity_decrease_successful">Product sale registered</string>
     <string name="detail_quantity_increase_successful">Product purchase registered</string>
+    <string name="detail_no_phone_activity">No phone app installed on this device</string>
 
 
 </resources>
