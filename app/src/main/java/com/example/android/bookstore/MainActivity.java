@@ -1,19 +1,17 @@
+//TODO fix "call supplier" button
 package com.example.android.bookstore;
 
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.bookstore.data.StoreContract;
@@ -40,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Find the ListView chich will be populated with product data
+        //Find the ListView which will be populated with product data
         ListView productListView = (ListView) findViewById(R.id.list);
 
         //Find and set empty view on the ListView, so it only shows when list has no items
@@ -51,24 +49,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         //no pet data yet (until loader finishes) so loader = null
         mCursorAdapter = new ProductCursorAdapter(this, null);
         productListView.setAdapter(mCursorAdapter);
-
-        //Setup item click listener
-        productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
-
-                //Form content URI that represents specific product that was clicked on, by appending "id" (passed as input to method) into the
-                //@PetEntry#CONTENT_URI
-                Uri currentProductURi = ContentUris.withAppendedId(StoreContract.ProductEntry.CONTENT_URI, id);
-
-                //set URI on the data field of intent
-                intent.setData(currentProductURi);
-
-                //Launch the @EditorActivity to display data for the current pet.
-                startActivity(intent);
-            }
-        });
 
         //Kick off the loader
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);

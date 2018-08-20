@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/editor_padding"
+    tools:context=".DetailViewActivity">
+
+    <!-- Product information layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <!-- Product attribute tags -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/DetailFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_name_tag" />
+
+            <TextView
+                style="@style/DetailFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_price_tag" />
+
+            <TextView
+                style="@style/DetailFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_quantity_tag" />
+
+            <TextView
+                style="@style/DetailFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_supplier_name_tag" />
+
+            <TextView
+                style="@style/DetailFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_supplier_phone_tag" />
+
+        </LinearLayout>
+        <!-- Product attribute values -->
+        <LinearLayout
+            android:id="@+id/detail_attribute_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/editor_padding">
+
+            <TextView
+                android:id="@+id/detail_name_value"
+                style="@style/DetailFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="name" />
+
+            <TextView
+                android:id="@+id/detail_price_value"
+                style="@style/DetailFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="price" />
+
+            <TextView
+                android:id="@+id/detail_quantity_value"
+                style="@style/DetailFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="quantity" />
+
+            <TextView
+                android:id="@+id/detail_supplier_name_value"
+                style="@style/DetailFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Supplier name" />
+
+            <TextView
+                android:id="@+id/detail_supplier_phone_value"
+                style="@style/DetailFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Supplier phone" />
+
+        </LinearLayout>
+    </LinearLayout>
+    <!-- Action button layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/detail_action_sell"
+            style="@style/DetailButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/action_sell" />
+
+        <Button
+            android:id="@+id/detail_action_call_supplier"
+            style="@style/DetailButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/action_call_supplier" />
+
+        <Button
+            android:id="@+id/detail_action_buy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/action_buy"
+            style="@style/DetailButtonStyle"/>
+    </LinearLayout>
+
+</LinearLayout>

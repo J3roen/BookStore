@@ -82,6 +82,11 @@ public class ProductProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException(getContext().getString(R.string.error_uri_unknown,uri));
         }
+
+        //set notification URI on the cursor
+        //if data changes, cursor gets notified!
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         //return cursor
         return cursor;
     }
@@ -113,7 +118,7 @@ public class ProductProvider extends ContentProvider {
     }
 
     /**
-     * helper method to insert Product with given values
+     * helper method to insert with given values
      *
      * @param uri    where to insert product
      * @param values values to insert into database

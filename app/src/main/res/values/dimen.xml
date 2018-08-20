@@ -15,4 +15,10 @@
     <!-- margin around the floating action button in MainActivity-->
     <dimen name="fab_margin">16dp</dimen>
 
+    <!-- padding for sale button in item list -->
+    <dimen name="item_list_sale_button">16dp</dimen>
+
+    <!-- padding the buttons in detail view -->
+    <dimen name="detail_action_button">8dp</dimen>
+
 </resources>

@@ -27,7 +27,7 @@ import com.example.android.bookstore.data.StoreContract.ProductEntry;
  */
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     /**
-     * Identifier for pet data loader
+     * Identifier for product data loader
      */
     private static final int EXISTING_PRODUCT_LOADER = 0;
 
@@ -123,8 +123,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     /**
      * private helper method to get user input from fields & save to database
+     * returns true if successful
      */
-    private void saveProduct() {
+    private boolean saveProduct() {
         //read user input + trim whitespaces
         String nameString = mNameEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
@@ -132,53 +133,65 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String supplierName = mSupplierNameEditText.getText().toString().trim();
         String supplierPhone = mSupplierPhoneEditText.getText().toString().trim();
 
-        //check if this is supposed to be a new product
-        //check if all fields in editor are blank
-        if (mCurrentProductUri == null
-                && TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString)
-                && TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierName)
-                && TextUtils.isEmpty(supplierPhone)) {
-            //if no fields are modified, return without creating new pet
-            return;
-        }
-
-        //Create a ContentValues object where column names are keys & product attributes are values
-        ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
-        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, priceString);
-        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityString);
-        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME, supplierName);
-        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE, supplierPhone);
-
-        //Determine if this is a new or existing product by checking mCurrentProductUri
-        if (mCurrentProductUri == null) {
-            //this is a NEW product, insert product into provider, returning content URI for new product
-            Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
-
-            //show a toast message depending if insertion was successful
-            if (newUri == null) {
-                //if URI = null, insertion failed
-                Toast.makeText(this, getString(R.string.error_saving_product), Toast.LENGTH_SHORT).show();
-            } else {
-                //otherwise, insertion was successful
-                Toast.makeText(this, getString(R.string.product_saved_successful), Toast.LENGTH_SHORT).show();
-            }
+        //check if fields are empty, if so -> do nothing & show toast message
+        if (TextUtils.isEmpty(nameString.trim()) || TextUtils.isEmpty(priceString.trim()) ||
+                TextUtils.isEmpty(quantityString.trim()) || TextUtils.isEmpty(supplierName.trim())
+                || TextUtils.isEmpty(supplierPhone.trim())) {
+            Toast.makeText(this, getString(R.string.error_empty_editor_fields), Toast.LENGTH_SHORT).show();
+            return false;
         } else {
-            //here is it an EXISTING product, so update with content URI
-            // and pass new ContentValues. Pass in null for selection & selection args
-            // because URI will already identify correct product
-            int rowsAffected = getContentResolver().update(mCurrentProductUri, values, null, null);
 
-            //show a toast message depending on update successful
-            if (rowsAffected == 0) {
-                //no rows affected
-                Toast.makeText(this, getString(R.string.error_updating_product), Toast.LENGTH_SHORT).show();
+            //check if this is supposed to be a new product
+            //check if all fields in editor are blank
+            if (mCurrentProductUri == null
+                    && TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString)
+                    && TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierName)
+                    && TextUtils.isEmpty(supplierPhone)) {
+                //if no fields are modified, return without creating new pet
+                return false;
+            }
+
+            //Create a ContentValues object where column names are keys & product attributes are values
+            ContentValues values = new ContentValues();
+            values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
+            values.put(ProductEntry.COLUMN_PRODUCT_PRICE, priceString);
+            values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityString);
+            values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME, supplierName);
+            values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE, supplierPhone);
+
+            //Determine if this is a new or existing product by checking mCurrentProductUri
+            if (mCurrentProductUri == null) {
+                //this is a NEW product, insert product into provider, returning content URI for new product
+                Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+
+                //show a toast message depending if insertion was successful
+                if (newUri == null) {
+                    //if URI = null, insertion failed
+                    Toast.makeText(this, getString(R.string.error_saving_product), Toast.LENGTH_SHORT).show();
+                    return false;
+                } else {
+                    //otherwise, insertion was successful
+                    Toast.makeText(this, getString(R.string.product_saved_successful), Toast.LENGTH_SHORT).show();
+                    return true;
+                }
             } else {
-                //rows affected, update successful
-                Toast.makeText(this, getString(R.string.product_update_successful, rowsAffected), Toast.LENGTH_SHORT).show();
+                //here is it an EXISTING product, so update with content URI
+                // and pass new ContentValues. Pass in null for selection & selection args
+                // because URI will already identify correct product
+                int rowsAffected = getContentResolver().update(mCurrentProductUri, values, null, null);
+
+                //show a toast message depending on update successful
+                if (rowsAffected == 0) {
+                    //no rows affected
+                    Toast.makeText(this, getString(R.string.error_updating_product), Toast.LENGTH_SHORT).show();
+                    return false;
+                } else {
+                    //rows affected, update successful
+                    Toast.makeText(this, getString(R.string.product_update_successful, rowsAffected), Toast.LENGTH_SHORT).show();
+                    return true;
+                }
             }
         }
-
     }
 
     @Override
@@ -219,10 +232,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         switch (item.getItemId()) {
             //respond to "Save"
             case R.id.action_save:
-                //save product to database
-                saveProduct();
-                //exit activity
-                finish();
+                //save product to database -> true = successful, false = failed
+                //finish activity if true, stay if false
+                if (saveProduct())
+                    finish();
                 return true;
             //respond to click on "delete"
             case R.id.action_delete:
@@ -233,7 +246,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             case android.R.id.home:
                 //if product hasn't changed, continue with going to parent activity
                 if (!mProductHasChanged) {
-                    NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    //relaunch detailActivity with product Uri
+                    Intent intent = new Intent(this, DetailViewActivity.class);
+                    intent.setData(mCurrentProductUri);
+                    startActivity(intent);
                     return true;
                 }
 
@@ -241,7 +257,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 //add clickListener to handle user confirming to discard changes
                 DialogInterface.OnClickListener discardButtonClickListener = new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick (DialogInterface dialog, int i) {
+                    public void onClick(DialogInterface dialog, int i) {
                         //user clicked 'discard', navigate to parent
                         NavUtils.navigateUpFromSameTask(EditorActivity.this);
                     }
@@ -331,7 +347,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     public void onBackPressed() {
         //if product hasn't changed, continue
         if (!mProductHasChanged) {
-            super.onBackPressed();
+            //relaunch detail activity with given productUri
+            Intent intent = new Intent(this, DetailViewActivity.class);
+            intent.setData(mCurrentProductUri);
+            startActivity(intent);
             return;
         }
 
@@ -351,7 +370,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // Since editor shows all pet attributes, define a projection that contains all columns
+        // Since editor shows all product attributes, define a projection that contains all columns
         String[] projection = {
                 ProductEntry._ID,
                 ProductEntry.COLUMN_PRODUCT_NAME,
@@ -380,7 +399,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         //proceed with moving to first row of cursor & reading data (should be only row in cursor)
         if (cursor.moveToFirst()) {
-            //find columns of pet attributes (all)
+            //find columns of product attributes (all)
             int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
             int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
             int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);

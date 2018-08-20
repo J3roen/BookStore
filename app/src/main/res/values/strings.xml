@@ -12,14 +12,17 @@
     <string name="error_quantity_negative">Quantity can\'t be negative </string>
     <string name="error_no_supplier_name">Supplier name can\'t be empty</string>
     <string name="error_no_supplier_phone">Supplier phone can\'t be empty</string>
+    <string name="error_empty_editor_fields">Please fill in all fields</string>
 
-    <!-- Error messages from editing pet data -->
+    <!-- Error messages from editing product data -->
     <string name="error_saving_product">Error with saving product</string>
     <string name="product_saved_successful">Product saved</string>
     <string name="error_updating_product">Error with updating product</string>
     <string name="product_update_successful">Product updated, %d attributes changed</string>
     <string name="product_delete_successful">Product deleted</string>
     <string name="product_delete_failed">Product delete failed</string>
+    <string name="error_product_negative_sell">No more inventory to sell!</string>
+    <string name="product_sold_successful">Product has been sold</string>
 
     <!-- Error messages with CRUD operations -->
     <string name="error_failed_insert_row">Failed to insert row for %s</string>
@@ -28,6 +31,10 @@
     <string name="error_uri_unknown">Cannot query unknown URI %s</string>
     <string name="error_uri_unknown_match">Unknown URI %s with match %d</string>
     <string name="error_update_not_supported">Update is not supported for %s</string>
+
+    <!-- Error messages in DetailViewActivity -->
+    <string name="error_uri_no_product">No product can be found for Uri %s</string>
+    <string name="error_quantity_code">Error on updating quantity, unknown code %d</string>
 
     <!-- Strings used in activity_editor-->
     <string name="category_overview">Product Information</string>
@@ -40,12 +47,16 @@
     <!-- Strings used for logging -->
     <string name="logger_rowsdeleted">%d rows deleted from pet database</string>
 
-    <!-- Strings used for menus -->
+    <!-- Strings used for menus & buttons-->
     <string name="action_delete_all_entries">Delete all products</string>
     <string name="action_add_new_product">Add new product</string>
     <string name="action_edit_product">Edit a product</string>
     <string name="action_save">Save</string>
     <string name="action_delete">Delete</string>
+    <string name="action_sell">Sell</string>
+    <string name="action_buy">Buy</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_call_supplier">Call supplier</string>
 
     <!-- Strings used for dialogs -->
     <string name="dialog_delete_message">Delete this product</string>
@@ -64,5 +75,16 @@
     <!-- String used when displaying list of products -->
     <string name="list_price_label">Price: € %d</string>
     <string name="list_quantity_label">Quantity: %d</string>
+
+    <!-- Strings used in DetailViewActivity -->
+    <string name="detail_view_label">Product details</string>
+    <string name="detail_name_tag">Name:</string>
+    <string name="detail_price_tag">Price:</string>
+    <string name="detail_quantity_tag">Quantity:</string>
+    <string name="detail_supplier_name_tag">Supplier name:</string>
+    <string name="detail_supplier_phone_tag">Supplier phone:</string>
+    <string name="detail_quantity_decrease_successful">Product sale registered</string>
+    <string name="detail_quantity_increase_successful">Product purchase registered</string>
+
 
 </resources>
